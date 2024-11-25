@@ -16,6 +16,7 @@
     <description>Demo project for Spring Boot</description>
     <properties>
         <java.version>17</java.version>
+        <geotools.version>31.2</geotools.version>
     </properties>
 
     <repositories>
@@ -63,31 +64,31 @@
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-main</artifactId>
-            <version>31.2</version>
+            <version>${geotools.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-referencing</artifactId>
-            <version>31.2</version>
+            <version>${geotools.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-shapefile</artifactId>
-            <version>31.2</version>
+            <version>${geotools.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-cql</artifactId>
-            <version>31.2</version>
+            <version>${geotools.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.geotools</groupId>
             <artifactId>gt-geojson</artifactId>
-            <version>31.2</version>
+            <version>${geotools.version}</version>
         </dependency>
 
         <dependency>
