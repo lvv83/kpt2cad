@@ -40,7 +40,14 @@ public class CoordinateSystemDictionary {
         coordinateSystemMap.put("11:20", KnownTransformation.MSK11_Q5_WGS84);
     }
 
-    public KnownTransformation getCoordinateSystem(String cadNumber) {
+    public KnownTransformation getCoordinateSystem(String cadNumber)
+    {
         return coordinateSystemMap.get(cadNumber);
+    }
+
+    public KnownTransformation getTransformationByCadastralQuarter(String cadastralQuarter)
+    {
+        String cadRegionCode = cadastralQuarter.substring(0, 5);
+        return coordinateSystemMap.get(cadRegionCode);
     }
 }

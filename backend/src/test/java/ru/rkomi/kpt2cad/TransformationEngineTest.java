@@ -23,7 +23,8 @@ public class TransformationEngineTest {
 	@Autowired
 	GeotoolsTransformationEngine geotoolsTransformationEngine;
 
-	GeometryFactory geometryFactory = new GeometryFactory();
+	@Autowired
+	GeometryFactory geometryFactory;
 
 	@ParameterizedTest
 	@MethodSource("knownPoints")

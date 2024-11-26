@@ -10,9 +10,11 @@ import java.util.Map;
 import org.geotools.api.referencing.FactoryException;
 import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
 import org.geotools.api.referencing.operation.MathTransform;
+import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.util.factory.Hints;
+import org.locationtech.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +30,13 @@ public class GeotoolsConfig {
 
 	static {
 		Hints.putSystemDefault(Hints.FORCE_LONGITUDE_FIRST_AXIS_ORDER, Boolean.TRUE);
+	}
+
+	@Bean
+	GeometryFactory geometryFactory()
+	{
+		// Инициализирует и возвращает фабрику геометрий с учётом подсказок Hints
+		return JTSFactoryFinder.getGeometryFactory();
 	}
 
 	@Bean
