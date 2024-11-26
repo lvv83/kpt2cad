@@ -1,12 +1,14 @@
 package ru.agiks.kptservice.xml;
 
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import ru.agiks.kptservice.xml.model.*;
 import ru.rkomi.kpt2cad.Proj4DemoApplication;
 
+import javax.xml.stream.XMLInputFactory;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,6 +21,9 @@ public class XmlDeserializationTest {
 
     @Autowired
     XmlMapper xmlMapper;
+
+    @Autowired
+    XMLInputFactory xmlInputFactory;
 
     @Test
     void contextLoads() {
@@ -81,5 +86,61 @@ public class XmlDeserializationTest {
         CoordinateElement coordinate = shell.getCoordinates().get(0);
         assertThat(coordinate.getX()).isEqualTo(5296168.93, withPrecision(2d));
         assertThat(coordinate.getY()).isEqualTo(844316.56, withPrecision(2d));
+    }
+
+    @Test
+    void streamTest()
+    {
+        // Потоковая десериализация
+        // ========================
+
+        // Потоковая десериализация выполняется посредством класса XmlFeatureReader и классом, реализующим
+        // интерфейс XmlFeatureListener. Первый последовательно считывает из XML-файла элементы, десериализует их и
+        // передаёт второму. Реализация XmlFeatureListener отвечает за дальнейшую обработку.
+        // Например, здесь в качестве теста ведётся подсчёт количества записей и атрибутов
+
+
+        // Получаем путь к файлу
+        File xmlFile = getResourcePath("/xsl/out.xml");
+
+        // Создаём и настраиваем XmlFeatureReader
+        XmlFeatureReader reader = new XmlFeatureReader(xmlInputFactory, xmlFile);
+
+        SimpleXmlFeatureListener listener = new SimpleXmlFeatureListener();
+        reader.setListener(listener); // задаём экземпляр обработчика потока
+        reader.setMapper(xmlMapper); // задаём экземпляр XML-десериализатора
+
+        // Запускаем потоковую десериализацию
+        reader.read();
+
+        // Проверяем результаты через обработчик
+        assertThat(listener.getAttributeCount()).isEqualTo(9);
+        assertThat(listener.getPrefix()).isEqualTo("ZU");
+        assertThat(listener.getFeatureCount()).isEqualTo(270);
+    }
+
+    @Getter
+    static class SimpleXmlFeatureListener implements XmlFeatureListener
+    {
+        private int attributeCount = 0;
+
+        private int featureCount = 0;
+
+        private String prefix;
+
+        @Override
+        public void onFeatureType(FeatureTypeElement featureType) {
+            attributeCount = featureType.getAttributes().size();
+        }
+
+        @Override
+        public void onFeature(FeatureElement feature) {
+            featureCount++;
+        }
+
+        @Override
+        public void onShapeFilePrefix(String prefix) {
+            this.prefix = prefix;
+        }
     }
 }

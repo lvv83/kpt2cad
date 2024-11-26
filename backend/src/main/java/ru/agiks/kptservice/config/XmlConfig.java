@@ -5,8 +5,11 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.xml.stream.XMLInputFactory;
+
 @Configuration
 public class XmlConfig {
+
     @Bean
     XmlMapper xmlMapper()
     {
@@ -20,5 +23,11 @@ public class XmlConfig {
                 .defaultUseWrapper(false)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                 .build();
+    }
+
+    @Bean
+    XMLInputFactory xmlInputFactory()
+    {
+        return XMLInputFactory.newInstance();
     }
 }
